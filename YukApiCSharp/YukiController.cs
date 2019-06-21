@@ -28,6 +28,8 @@ namespace YukApiCSharp {
         public void SetYukiSession(JObject value) {
             if (value == null) {
                 Response.Cookies.Append("YUKISESSION", null, new CookieOptions() { MaxAge = TimeSpan.Zero });
+                Console.WriteLine("Session clear");
+                return;
             }
             string sessionStr = value.ToString(Newtonsoft.Json.Formatting.None);
             byte[] cipher, nonce;
