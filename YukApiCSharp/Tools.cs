@@ -15,15 +15,18 @@ using Newtonsoft.Json.Linq;
 namespace YukApiCSharp {
     public static class Tools {
         public static readonly RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
+
         public static string HeadersToString(IHeaderDictionary headers) {
             StringBuilder sb = new StringBuilder();
-            foreach(var header in headers) {
-                foreach(string value in header.Value) {
+            foreach (var header in headers) {
+                foreach (string value in header.Value) {
                     sb.Append(header.Key).Append(": ").Append(value).Append("\r\n");
                 }
             }
+
             return sb.ToString();
         }
+
         public static byte[] AesGcm256Encrypt(byte[] plain, byte[] key, out byte[] nonce) {
             Debug.Assert(key.Length * 8 == 256);
             nonce = new byte[12];
@@ -48,14 +51,15 @@ namespace YukApiCSharp {
             Debug.Assert(p == plain.Length);
             return plain;
         }
+
         public static byte[] HexToByteArray(string hex) {
             Debug.Assert(hex.Length % 2 == 0);
             byte[] rst = new byte[hex.Length / 2];
-            for(int i=0; i<rst.Length; i++) {
+            for (int i = 0; i < rst.Length; i++) {
                 rst[i] = byte.Parse(hex.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber);
             }
+
             return rst;
         }
-
     }
 }

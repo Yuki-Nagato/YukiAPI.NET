@@ -7,27 +7,28 @@ namespace YukApiCSharp.Controllers {
     public class ViewIDRecordController : ControllerBase {
         [HttpPost("api/view-id-record")]
         public ViewIDRecordResponse Record([FromBody] ViewIDRecordRequest req) {
-            Console.WriteLine($"收到View ID记录请求，View ID: {req.id}");
-            using(var conn = new DatabaseCommandConnection("insert into view_id_record (view_id, req_headers, time) values (@id, @reqHeaders, @time)")) {
-                if (req.id != null)
-                    conn.Command.Parameters.AddWithValue("id", req.id);
+            Console.WriteLine($"收到View ID记录请求，View ID: {req.Id}");
+            using (var conn = new DatabaseCommandConnection("insert into view_id_record (view_id, req_headers, time) values (@id, @reqHeaders, @time)")) {
+                if (req.Id != null)
+                    conn.Command.Parameters.AddWithValue("id", req.Id);
                 else
                     conn.Command.Parameters.AddWithValue("id", DBNull.Value);
                 conn.Command.Parameters.AddWithValue("reqHeaders", Tools.HeadersToString(Request.Headers));
                 conn.Command.Parameters.AddWithValue("time", DateTime.Now);
                 conn.Command.ExecuteNonQuery();
             }
+
             return new ViewIDRecordResponse() {
-                time = DateTime.Now
+                Time = DateTime.Now
             };
         }
     }
 
     public struct ViewIDRecordRequest {
-        public string id;
+        public string Id;
     }
 
     public struct ViewIDRecordResponse {
-        public DateTime time;
+        public DateTime Time;
     }
 }

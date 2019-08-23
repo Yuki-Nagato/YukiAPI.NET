@@ -1,59 +1,44 @@
-﻿using System;
-using System.Collections;
-using System.IO;
-using YamlDotNet.RepresentationModel;
+﻿using System.IO;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace YukApiCSharp {
-    public class Config {
-        static readonly string ConfigFile = "config.yaml";
-        public static ConfigNode OpenFileNode() {
-            return new ConfigNode(new StreamReader(ConfigFile));
+    class Config {
+        public static Config ReadConfig() {
+            return new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build().Deserialize<Config>(File.ReadAllText("config.yaml"));
         }
-        
-        public class ConfigNode : IDisposable {
-            private YamlNode node;
-            private StreamReader reader;
-            public ConfigNode(YamlNode node) {
-                this.node = node;
-                reader = null;
-            }
-            public ConfigNode(StreamReader reader) {
-                this.reader = reader;
-                YamlStream yaml = new YamlStream();
-                yaml.Load(new StreamReader(ConfigFile, System.Text.Encoding.UTF8));
-                node = yaml.Documents[0].RootNode;
-            }
-            public ConfigNode this[int i] {
-                get {
-                    return new ConfigNode(((YamlSequenceNode)node).Children[i]);
-                }
-            }
-            public ConfigNode this[string key] {
-                get {
-                    return new ConfigNode(((YamlMappingNode)node).Children[new YamlScalarNode(key)]);
-                }
-            }
-            override public string ToString() {
-                return node.ToString();
-            }
 
-            public string StringValue() {
-                return node.ToString();
-            }
-            public int IntValue() {
-                return int.Parse(node.ToString());
-            }
-
-            public void Dispose() {
-                if(reader!=null) {
-                    reader.Close();
-                    reader.Dispose();
-                }
-            }
-            ~ConfigNode() {
-                Dispose();
-            }
-        }
+        public Database Database;
+        public Mail Mail;
+        public Session Session;
     }
-    
+    struct Database {
+        public Connection Connection;
+        public TableItem[] Tables;
+    }
+    struct Connection {
+        public string Host;
+        public int Port;
+        public string Database;
+        public string Username;
+        public string Password;
+    }
+    struct TableItem {
+        public string Name;
+        public ColumnItem[] Columns;
+    }
+    struct ColumnItem {
+        public string Name;
+        public string Type;
+    }
+    struct Mail {
+        public string Server;
+        public int Port;
+        public string Username;
+        public string Password;
+        public string From;
+    }
+    struct Session {
+        public string Key;
+    }
 }

@@ -1,31 +1,33 @@
+---
 database:
   connection:
     host: localhost
+    port: 5432
     database: yukiapi
     username: root
-    password: password
-  table:
-    - name: do_you_like_me
-      column:
-        - name: host
-          type: text
-        - name: req_headers
-          type: text
-        - name: time
-          type: timestamp
-    - name: view_id_record
-      column:
-        - name: view_id
-          type: text
-        - name: req_headers
-          type: text
-        - name: time
-          type: timestamp
-smtp:
+    password: passw0rd
+  tables:
+  - name: do_you_like_me
+    columns:
+    - name: host
+      type: text
+    - name: req_headers
+      type: text
+    - name: time
+      type: timestamp
+  - name: view_id_record
+    columns:
+    - name: view_id
+      type: text
+    - name: req_headers
+      type: text
+    - name: time
+      type: timestamps
+mail:
   server: smtp.server.com
   port: 465
-  username: yuki@yuki-nagato.com
-  password: password
+  username: username
+  password: passw0rd
   from: 長門有希 <yuki@yuki-nagato.com>
 session:
-  key: 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF
+  key: 8aa048d6052ec2a667e15f5f81e5ed12269ebf3d0b8f69796ad4f9a76a85cbf7
