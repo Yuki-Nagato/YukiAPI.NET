@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System;
 
-namespace YukApiCSharp {
+namespace YukiApiCSharp {
     public class DatabaseCommandConnection : IDisposable {
         static string ConnectionString {
             get {

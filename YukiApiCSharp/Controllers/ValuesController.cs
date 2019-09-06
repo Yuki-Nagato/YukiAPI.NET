@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YukApiCSharp.Controllers {
+namespace YukiApiCSharp.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase {

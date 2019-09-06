@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 
-namespace YukApiCSharp {
+namespace YukiApiCSharp {
     public class Startup {
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
@@ -29,7 +29,7 @@ namespace YukApiCSharp {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
             if (env.IsDevelopment()) {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Warning: Development Environment");
+                Logger.Log("Warning: Development Environment");
                 Console.ResetColor();
                 app.UseDeveloperExceptionPage();
             }

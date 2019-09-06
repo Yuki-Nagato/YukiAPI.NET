@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 
-namespace YukApiCSharp {
+namespace YukiApiCSharp {
     public static class Tools {
         public static readonly RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
 
@@ -32,7 +32,7 @@ namespace YukApiCSharp {
             nonce = new byte[12];
             rngCsp.GetBytes(nonce);
             GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
-            Console.WriteLine("AES/GCM加密，" + gcmBlockCipher.AlgorithmName);
+            Logger.Log("AES/GCM加密，" + gcmBlockCipher.AlgorithmName);
             gcmBlockCipher.Init(true, new AeadParameters(new KeyParameter(key), 128, nonce));
             byte[] cipher = new byte[gcmBlockCipher.GetOutputSize(plain.Length)];
             int p = gcmBlockCipher.ProcessBytes(plain, 0, plain.Length, cipher, 0);
@@ -43,7 +43,7 @@ namespace YukApiCSharp {
 
         public static byte[] AesGcm256Decrypt(byte[] cipher, byte[] key, byte[] nonce) {
             GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
-            Console.WriteLine("AES/GCM解密，" + gcmBlockCipher.AlgorithmName);
+            Logger.Log("AES/GCM解密，" + gcmBlockCipher.AlgorithmName);
             gcmBlockCipher.Init(false, new AeadParameters(new KeyParameter(key), 128, nonce));
             byte[] plain = new byte[gcmBlockCipher.GetOutputSize(cipher.Length)];
             int p = gcmBlockCipher.ProcessBytes(cipher, 0, cipher.Length, plain, 0);

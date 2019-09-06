@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YukApiCSharp.Controllers {
+namespace YukiApiCSharp.Controllers {
     [ApiController]
     public class DoYouLikeMeController : YukiController {
         [HttpPost("api/do-you-like-me")]

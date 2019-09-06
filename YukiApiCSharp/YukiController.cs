@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
 
-namespace YukApiCSharp {
+namespace YukiApiCSharp {
     public abstract class YukiController : ControllerBase {
         [NonAction]
         public JObject GetYukiSession() {
@@ -19,7 +19,7 @@ namespace YukApiCSharp {
             byte[] plain = Tools.AesGcm256Decrypt(cipher, key, nonce);
             string sessionStr = Encoding.UTF8.GetString(plain);
             JObject rst = JObject.Parse(sessionStr);
-            Console.WriteLine("Session get: " + rst.ToString());
+            Logger.Log("Session get: " + rst.ToString());
             return rst;
         }
 
@@ -27,7 +27,7 @@ namespace YukApiCSharp {
         public void SetYukiSession(JObject value) {
             if (value == null) {
                 Response.Cookies.Append("YUKISESSION", null, new CookieOptions() {MaxAge = TimeSpan.Zero});
-                Console.WriteLine("Session clear");
+                Logger.Log("Session clear");
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace YukApiCSharp {
                 Path = "/api/",
                 SameSite = SameSiteMode.None
             });
-            Console.WriteLine("Session set: " + value.ToString());
+            Logger.Log("Session set: " + value.ToString());
         }
     }
 }

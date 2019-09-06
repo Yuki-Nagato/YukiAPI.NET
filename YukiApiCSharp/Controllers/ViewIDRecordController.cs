@@ -2,12 +2,12 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YukApiCSharp.Controllers {
+namespace YukiApiCSharp.Controllers {
     [ApiController]
     public class ViewIDRecordController : ControllerBase {
         [HttpPost("api/view-id-record")]
         public ViewIDRecordResponse Record([FromBody] ViewIDRecordRequest req) {
-            Console.WriteLine($"收到View ID记录请求，View ID: {req.Id}");
+            Logger.Log($"收到View ID记录请求，View ID: {req.Id}");
             using (var conn = new DatabaseCommandConnection("insert into view_id_record (view_id, req_headers, time) values (@id, @reqHeaders, @time)")) {
                 if (req.Id != null)
                     conn.Command.Parameters.AddWithValue("id", req.Id);

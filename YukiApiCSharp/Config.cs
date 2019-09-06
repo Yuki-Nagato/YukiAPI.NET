@@ -2,7 +2,7 @@
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace YukApiCSharp {
+namespace YukiApiCSharp {
     class Config {
         public static Config ReadConfig() {
             return new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build().Deserialize<Config>(File.ReadAllText("config.yaml"));
@@ -11,6 +11,7 @@ namespace YukApiCSharp {
         public Database Database;
         public Mail Mail;
         public Session Session;
+        public Server Server;
     }
     struct Database {
         public Connection Connection;
@@ -40,5 +41,8 @@ namespace YukApiCSharp {
     }
     struct Session {
         public string Key;
+    }
+    struct Server {
+        public string Urls;
     }
 }

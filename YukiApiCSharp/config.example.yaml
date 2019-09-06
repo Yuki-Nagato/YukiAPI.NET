@@ -1,11 +1,13 @@
 ---
+server:
+  urls: http://unix:/var/web/yukiapi.socket
 database:
   connection:
-    host: localhost
-    port: 5432
+    host: /var/run/postgresql
+    port:
     database: yukiapi
-    username: root
-    password: passw0rd
+    username:
+    password:
   tables:
   - name: do_you_like_me
     columns:
