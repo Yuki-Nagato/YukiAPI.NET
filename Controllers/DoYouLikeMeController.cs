@@ -7,19 +7,16 @@ using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace YukiAPI {
+namespace YukiAPI.Controllers {
     [Route("api/do-you-like-me")]
     [ApiController]
     public class DoYouLikeMeController : YukiController<DoYouLikeMeController> {
         public DoYouLikeMeController(ILogger<DoYouLikeMeController> logger) : base(logger) {
+            logger.LogDebug("DoYouLikeMeController Constructed");
         }
 
         [HttpPost]
         public DoYouLikeMeResponse Post([FromBody]DoYouLikeMeRequest req) {
-            Response.Headers.Add("Access-Control-Allow-Origin", "https://blog.yuki-nagato.com");
-            Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-            Response.Headers.Add("Access-Control-Allow-Methods", "POST");
-            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
             switch (req.Method) {
                 case "add": {
                         Logger.LogInformation("DoYouLikeMe Add, Host={0}", req.Host);
@@ -84,17 +81,6 @@ namespace YukiAPI {
             public string Host { get; set; }
             public DateTime Time { get; set; }
             public string Header { get; set; }
-        }
-
-
-
-        [HttpOptions]
-        public void Options() {
-            Response.StatusCode = (int)HttpStatusCode.NoContent;
-            Response.Headers.Add("Access-Control-Allow-Origin", "https://blog.yuki-nagato.com");
-            Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
-            Response.Headers.Add("Access-Control-Allow-Methods", "POST");
-            Response.Headers.Add("Access-Control-Allow-Credentials", "true");
         }
     }
 }

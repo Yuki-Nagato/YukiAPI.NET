@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using YukiAPI.Hubs;
 
 namespace YukiAPI {
     public class Startup {
@@ -23,10 +24,8 @@ namespace YukiAPI {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            // services.AddRouting((routeOptions) => {
-            //     routeOptions.ConstraintMap["slugify"] = typeof(SlugifyParameterTransformer);
-            // });
             services.AddControllers();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,24 +49,25 @@ namespace YukiAPI {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseYuki();
+            app.UseYuki(); // 危险地使用CORS
 
             app.UseStaticFiles();
 
             app.UseRouting();
 
+
+            // 由Yuki处理
+            // app.UseCors((corsPolicyBuilder) => {
+            //     corsPolicyBuilder.WithOrigins("http://localhost:81").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            // }); // CORS 中间件必须配置为在对 UseRouting 和 UseEndpoints的调用之间执行
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
+                endpoints.MapHub<PageviewHub>("/hub/pageview", (httpConnectionDispatcherOptions) => {
+                });
                 endpoints.MapControllers();
             });
         }
     }
-
-    // public class SlugifyParameterTransformer : IOutboundParameterTransformer {
-    //     public string TransformOutbound(object value) {
-    //         // Slugify value
-    //         return value == null ? null : Regex.Replace(value.ToString(), "([a-z])([A-Z])", "$1-$2").ToLower();
-    //     }
-    // }
 }

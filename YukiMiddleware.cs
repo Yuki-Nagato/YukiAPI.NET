@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
 
 namespace YukiAPI {
     public class YukiMiddleware {
@@ -35,9 +36,25 @@ namespace YukiAPI {
             ) + Environment.NewLine;
             log += "Request Headers:" + Environment.NewLine;
             log += context.Request.Headers.ToHttpString();
-            _logger.LogInformation(log);
+            _logger.LogDebug(log);
+
+            // 危险地使用CORS
+            if (context.Request.Headers.ContainsKey("Origin")) {
+                context.Response.Headers["Access-Control-Allow-Origin"] = context.Request.Headers["Origin"];
+                context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+                if (context.Request.Headers.ContainsKey("Access-Control-Request-Headers")) {
+                    context.Response.Headers["Access-Control-Allow-Headers"] = context.Request.Headers["Access-Control-Request-Headers"];
+                }
+                if (context.Request.Headers.ContainsKey("Access-Control-Request-Method")) {
+                    context.Response.Headers["Access-Control-Allow-Methods"] = context.Request.Headers["Access-Control-Request-Method"];
+                }
+            }
 
             await _next(context);
+
+            if (context.Request.Headers.ContainsKey("Origin") && context.Request.Method == HttpMethod.Options.Method) {
+                context.Response.StatusCode = (int)HttpStatusCode.NoContent;
+            }
         }
     }
     public static class YukiMiddlewareExtensions {
